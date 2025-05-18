@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  sentiment-db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: sentimentdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  sentiment-api:
+    build: .
+    depends_on:
+      - sentiment-db
+    environment:
+      POSTGRES_HOST: sentiment-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: sentimentdb
+    ports:
+      - "5001:5000"
+
+volumes:
+  pgdata:
